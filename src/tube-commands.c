@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include "swi.h"
 #include "tube-swi.h"
+#include "tube-client.h"
 #include "tube-commands.h"
 #include "darm/darm.h"
 #include "tube-defs.h"
@@ -116,6 +117,7 @@ int doCmdTest(const char *params) {
 }
 
 int doCmdHelp(const char *params) {
+  char s[10];
   if (*params == 0x00 || *params == 0x0a || *params == 0x0d) {
     // *HELP without any parameters
     OS_Write0(help);
@@ -162,6 +164,11 @@ int doCmdHelp(const char *params) {
         OS_WriteC('0' + i % 10);
         OS_WriteC(' ');
         OS_Write0(copro_def->name);
+        if (i == 1 || i == 3) {
+          if (snprintf(s, 10, " (%uMHz)", get_copro_mhz(i)) <= 9) {
+            OS_Write0(s);
+          }
+        }
         OS_Write0("\r\n");
      }
   }

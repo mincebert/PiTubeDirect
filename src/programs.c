@@ -2756,12 +2756,22 @@ void copy_test_programs(uint8_t *memory) {
          continue;
       }
 
+      // write the name of the processor
       int reqd = snprintf((char *) list_end, list_remain, "%2d %s\r", i, copro_def->name);
 
       // if we had space for the complete line move on, else scrap it
       if (reqd < list_remain) {
          list_end += reqd;
          list_remain -= reqd;
+      }
+
+      // if we are copro 1 or 3, write the configured MHz on the end
+      if (i == 1 || i == 3) {
+        reqd = snprintf((char *) list_end, 10, " (%uMHz)", get_copro_mhz(i));
+        if (reqd <= list_remain) {
+          list_end += reqd;
+          list_remain -= reqd;
+        }
       }
    }
    *list_end = '\0';   // end of text marker

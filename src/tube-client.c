@@ -156,13 +156,14 @@ static unsigned int get_copro_number() {
    return copro;
 }
 
-unsigned int get_copro_mhz(int copro_check) {
+unsigned int get_copro_mhz(int copro_num) {
    unsigned int copro_mhz = 0; // default
+   char *copro_prop = NULL;
    // Note: Co Pro Speed is only implemented in the 65tube Co Processors (copros 0/1/2/3)
-   if (copro_defs[copro_check]->type == TYPE_65TUBE_1) {
-      coppro_mhz = 3; // default to 3MHz (65C02)
+   if (copro_defs[copro_num].type == TYPE_65TUBE_1) {
+      copro_mhz = 3; // default to 3MHz (65C02)
       copro_prop = get_cmdline_prop("copro1_speed");
-   } else if (copro_defs[copro_check]->type == TYPE_65TUBE_3) {
+   } else if (copro_defs[copro_num].type == TYPE_65TUBE_3) {
       copro_mhz = 4; // default to 4MHz (65C102)
       copro_prop = get_cmdline_prop("copro3_speed");
    }
@@ -172,11 +173,10 @@ unsigned int get_copro_mhz(int copro_check) {
    if (copro_mhz > 255) {
       copro_mhz = 0;
    }
-   return mhz;
+   return copro_mhz;
 }
 
 static void get_copro_speed() {
-   char *copro_prop = NULL;
    copro_speed = get_copro_mhz(copro);
    LOG_DEBUG("emulator speed %u\r\n", copro_speed);
    if (copro_speed !=0) {
