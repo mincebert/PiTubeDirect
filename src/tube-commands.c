@@ -117,7 +117,7 @@ int doCmdTest(const char *params) {
 }
 
 int doCmdHelp(const char *params) {
-  char s[10];
+  char buff[10];
   if (*params == 0x00 || *params == 0x0a || *params == 0x0d) {
     // *HELP without any parameters
     OS_Write0(help);
@@ -165,8 +165,8 @@ int doCmdHelp(const char *params) {
         OS_WriteC(' ');
         OS_Write0(copro_def->name);
         if (i == 1 || i == 3) {
-          if (snprintf(s, 10, " (%uMHz)", get_copro_mhz(i)) <= 9) {
-            OS_Write0(s);
+          if (snprintf(buff, 10, " (%uMHz)", get_copro_mhz(i)) < 10) {
+            OS_Write0(buff);
           }
         }
         OS_Write0("\r\n");
